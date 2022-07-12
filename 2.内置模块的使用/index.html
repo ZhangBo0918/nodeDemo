@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            width: 100%;
+        }
+        ul{
+            list-style: none;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        ul li{
+            display: block;
+            margin-top: 10px;
+            padding-top: 50px;
+            width: 20%;
+            height: 300px;
+            text-align: center;
+            border: 1px solid #666;
+        }
+        ul li img{
+            width: 82px;
+            height: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+    </div>
+</body>
+<script>
+    const div = document.querySelector('div')
+    let xhr = new XMLHttpRequest()
+    let datas = null
+    xhr.open('GET','http://127.0.0.1:5000')
+    xhr.send()
+    xhr.onreadystatechange = function () {
+        if(xhr.readyState===4){
+            if(xhr.status>=200&&xhr.status<300){
+                datas = JSON.parse(xhr.response)
+                datas = datas.classicMovies.list
+                let res = '<ul>'
+                for(let i=0;i<datas.length;i++){
+                    let li = `<li>
+                        <img src=${datas[i].img} />
+                        <p>电影名：${datas[i].nm}</p>
+                        <p>上映时间：${datas[i].pubDesc}</p>
+                        <p>主演：${datas[i].star}</p>
+                    </li>`
+                    res+=li
+                }
+                res+='</ul>'
+                div.innerHTML = res
+            }
+        }else{
+            div.innerHTML = `<p>数据获取失败，错误码为${xhr.status}</p>`
+        }
+    }
+    function dataType(data){
+        return Object.prototype.toString.call(data).slice(8,-1)
+    }
+</script>
+</html>
